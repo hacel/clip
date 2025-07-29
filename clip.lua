@@ -247,6 +247,7 @@ mp.register_script_message('clip', function(...)
         elseif key == 'preset' then
             o[key] = value
         elseif key == 'output_dir' then
+            value = string.gsub(value, '^~', os.getenv('HOME') or '~')
             o[key] = value
         end
     end
@@ -279,10 +280,10 @@ mp.register_script_message('clip', function(...)
         return
     end
     if o.output_dir ~= '' then
-        local res = utils.readdir(o.output_dir)
-        if not res then
-            osd_msg('clip: output directory does not exist: ' .. o.output_dir)
-            msg.error('output directory does not exist: ' .. o.output_dir)
+        local res = utils.file_info(o.output_dir)
+        if not res or not res.is_dir then
+            osd_msg('clip: output directory does not exist or is not a directory: ' .. o.output_dir)
+            msg.error('output directory does not exist or is not a directory: ' .. o.output_dir)
             clear()
             return
         end
