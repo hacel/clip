@@ -5,7 +5,6 @@
 ### High Priority
 
 - **CRF (Constant Rate Factor)** - Quality-based encoding instead of bitrate-only control
-- **Hardware acceleration** - Support NVENC, VAAPI, VideoToolbox encoders for faster encoding
 
 ### Medium Priority
 
@@ -25,7 +24,6 @@
 ### High Priority
 
 - **CRF support** - `-crf` parameter for quality-based encoding
-- **Hardware encoders** - `h264_nvenc`, `hevc_nvenc`, `h264_vaapi`, etc.
 - **Video filters** - `-vf scale=1920:1080`, `-vf crop=w:h:x:y`, etc.
 
 ### Medium Priority
@@ -44,6 +42,5 @@
 ## Implementation Notes
 
 - CRF and bitrate should be mutually exclusive options
-- Hardware acceleration detection should be automatic with fallback
 - Video filters need input validation for dimensions and coordinates
 - Custom output paths should support environment variables and relative paths
