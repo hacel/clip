@@ -2,11 +2,14 @@
 
 ## Missing Features
 
+### High priority
+
+- **Subtitle burn-in option** - Hardcode subtitles into video instead of just copying streams
+
 ### Medium Priority
 
 - **Custom filename templates** - User-defined naming patterns beyond `_1`, `_2` suffixes
 - **Video filters** - Support for scaling, cropping, denoising, sharpening via `-vf`
-- **Subtitle burn-in option** - Hardcode subtitles into video instead of just copying streams
 - **Progress indication** - Show encoding progress bar or percentage
 
 ### Low Priority
