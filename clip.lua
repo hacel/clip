@@ -120,13 +120,15 @@ local function clip(o)
         append(cmd, '-map', '0:s:' .. sid - 1)
     end
 
-    -- calculate bitrate
-    if o.file_size ~= 0 then
+    -- calculate bitrate (only if not using CRF)
+    if o.file_size > 0 then
         local bitrate = math.floor(o.file_size * 8 / (to - from))
         msg.info('total bitrate = ' .. bitrate)
         local video_bitrate = bitrate - o.audio_bitrate
         append(cmd, '-b:v', tostring(video_bitrate))
         msg.info('video bitrate = ' .. video_bitrate)
+    elseif o.crf > 0 then
+        append(cmd, '-crf', tostring(o.crf))
     end
 
     -- generate path of the output
@@ -219,6 +221,7 @@ mp.register_script_message('clip', function(...)
     --- @field two_pass boolean
     --- @field preset string
     --- @field output_dir string
+    --- @field crf number
     local o = {
         file_size = 0,
         video_encoder = 'libx264',
@@ -227,6 +230,7 @@ mp.register_script_message('clip', function(...)
         two_pass = false,
         preset = 'medium',
         output_dir = '',
+        crf = 0,
     }
 
     -- parse named parameters, if any, into the options table
@@ -249,6 +253,8 @@ mp.register_script_message('clip', function(...)
         elseif key == 'output_dir' then
             value = string.gsub(value, '^~', os.getenv('HOME') or '~')
             o[key] = value
+        elseif key == 'crf' then
+            o[key] = tonumber(value)
         end
     end
 
@@ -259,6 +265,7 @@ mp.register_script_message('clip', function(...)
     msg.info('two_pass = ' .. tostring(o.two_pass))
     msg.info('preset = ' .. o.preset)
     msg.info('output_dir = ' .. o.output_dir)
+    msg.info('crf = ' .. o.crf)
 
     -- sanity checks
     if o.file_size < 0 then
@@ -287,6 +294,18 @@ mp.register_script_message('clip', function(...)
             clear()
             return
         end
+    end
+    if o.crf > 0 and o.file_size > 0 then
+        osd_msg('clip: crf and file_size cannot be used together')
+        msg.error('crf and file_size cannot be used together')
+        clear()
+        return
+    end
+    if o.crf > 0 and o.two_pass then
+        osd_msg('clip: crf and two_pass cannot be used together')
+        msg.error('crf and two_pass cannot be used together')
+        clear()
+        return
     end
     clip(o)
 end)

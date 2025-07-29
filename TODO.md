@@ -2,10 +2,6 @@
 
 ## Missing Features
 
-### High Priority
-
-- **CRF (Constant Rate Factor)** - Quality-based encoding instead of bitrate-only control
-
 ### Medium Priority
 
 - **Custom filename templates** - User-defined naming patterns beyond `_1`, `_2` suffixes
@@ -23,7 +19,6 @@
 
 ### High Priority
 
-- **CRF support** - `-crf` parameter for quality-based encoding
 - **Video filters** - `-vf scale=1920:1080`, `-vf crop=w:h:x:y`, etc.
 
 ### Medium Priority
@@ -41,6 +36,4 @@
 
 ## Implementation Notes
 
-- CRF and bitrate should be mutually exclusive options
 - Video filters need input validation for dimensions and coordinates
-- Custom output paths should support environment variables and relative paths

@@ -56,6 +56,9 @@ C script-message-to clip clip preset=fast file_size=50
 
 # Save clips to custom directory
 v script-message-to clip clip output_dir=/home/user/clips
+
+# Quality-based encoding with CRF
+q script-message-to clip clip crf=23
 ```
 
 ### Available Parameters
@@ -73,6 +76,10 @@ v script-message-to clip clip output_dir=/home/user/clips
 - `preset`: Encoding speed/quality preset (default: 'medium')
 - `output_dir`: Custom output directory (default: same as source file)
   - Directory must already exist
+- `crf`: Constant Rate Factor for quality-based encoding (default: 0 = disabled)
+  - Range: 0-51 for H.264 (lower = better quality, larger files)
+  - Typical values: 18 (high quality) to 28 (lower quality)
+  - Cannot be used with `file_size` or `two_pass`
 
 List available encoders: `ffmpeg -encoders`
 
