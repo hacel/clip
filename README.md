@@ -74,7 +74,7 @@ v script-message-to clip clip output_dir=/home/user/clips
 - `output_dir`: Custom output directory (default: same as source file)
   - Directory must already exist
 
-List available encoders: `ffmpeg -codecs`
+List available encoders: `ffmpeg -encoders`
 
 ### How to Create Clips
 
