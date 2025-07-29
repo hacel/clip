@@ -1,0 +1,3 @@
+- Minimize globals, use `local` extensively
+- Use `mp.osd_message()` for user feedback, `msg.error()` for logging
+- Use `mp.get_property()` for mpv state access
