@@ -144,7 +144,7 @@ local function clip(o)
     if not o.two_pass then
         append(cmd, output_path)
         msg.info('command = ' .. table.concat(cmd, ' '))
-        osd_set(string.format('clip: %s to %s', from, to))
+        osd_set(string.format('clip: encoding from %s to %s...', from, to))
         local res = utils.subprocess({ args = cmd })
         osd_set('')
         if res.status == 0 then
@@ -166,7 +166,7 @@ local function clip(o)
             first_pass[#first_pass] = 'NUL'
         end
         msg.info('command = ' .. table.concat(first_pass, ' '))
-        osd_set(string.format('clip: %s to %s (first pass)', from, to))
+        osd_set(string.format('clip: analyzing...', from, to))
         local res = utils.subprocess({ args = first_pass })
         if res.status ~= 0 then
             osd_msg('clip: first pass failed, check the console')
@@ -178,7 +178,7 @@ local function clip(o)
         end
 
         -- second pass
-        osd_set(string.format('clip: %s to %s (second pass)', from, to))
+        osd_set(string.format('clip: encoding from %s to %s...', from, to))
         local second_pass = copy_array(cmd)
         append(second_pass, '-pass', '2', '-passlogfile', temp_file, output_path)
         msg.info('command = ' .. table.concat(second_pass, ' '))
