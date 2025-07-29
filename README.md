@@ -53,6 +53,9 @@ c script-message-to clip clip video_encoder=libvpx-vp9 file_size=25
 
 # Fast encoding preset
 C script-message-to clip clip preset=fast file_size=50
+
+# Save clips to custom directory
+v script-message-to clip clip output_dir=/home/user/clips
 ```
 
 ### Available Parameters
@@ -68,6 +71,8 @@ C script-message-to clip clip preset=fast file_size=50
 - `two_pass`: Enable two-pass encoding for better quality (default: false)
   - Requires `file_size` to be specified
 - `preset`: Encoding speed/quality preset (default: 'medium')
+- `output_dir`: Custom output directory (default: same as source file)
+  - Directory must already exist
 
 List available encoders: `ffmpeg -codecs`
 

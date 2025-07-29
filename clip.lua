@@ -133,13 +133,17 @@ local function clip(o)
     local dir, filename = utils.split_path(path)
     local filename_without_ext = string.gsub(filename, '%.[^.]+$', '')
     local ext = get_extension_for_encoder(o.video_encoder)
-    local output_name = append_num_to_filename(dir, filename_without_ext, ext)
+    local output_dir = dir
+    if o.output_dir ~= '' then
+        output_dir = o.output_dir
+    end
+    local output_name = append_num_to_filename(output_dir, filename_without_ext, ext)
     if output_name == nil then
         osd_msg('clip: failed to generate output filename')
         msg.error('failed to generate output filename')
         return
     end
-    local output_path = utils.join_path(dir, output_name)
+    local output_path = utils.join_path(output_dir, output_name)
 
     if not o.two_pass then
         append(cmd, output_path)
@@ -214,6 +218,7 @@ mp.register_script_message('clip', function(...)
     --- @field audio_bitrate number
     --- @field two_pass boolean
     --- @field preset string
+    --- @field output_dir string
     local o = {
         file_size = 0,
         video_encoder = 'libx264',
@@ -221,6 +226,7 @@ mp.register_script_message('clip', function(...)
         audio_bitrate = 128 * 1000,
         two_pass = false,
         preset = 'medium',
+        output_dir = '',
     }
 
     -- parse named parameters, if any, into the options table
@@ -240,6 +246,8 @@ mp.register_script_message('clip', function(...)
             o[key] = value == 'true'
         elseif key == 'preset' then
             o[key] = value
+        elseif key == 'output_dir' then
+            o[key] = value
         end
     end
 
@@ -249,6 +257,7 @@ mp.register_script_message('clip', function(...)
     msg.info('audio_bitrate = ' .. o.audio_bitrate)
     msg.info('two_pass = ' .. tostring(o.two_pass))
     msg.info('preset = ' .. o.preset)
+    msg.info('output_dir = ' .. o.output_dir)
 
     -- sanity checks
     if o.file_size < 0 then
@@ -268,6 +277,15 @@ mp.register_script_message('clip', function(...)
         msg.error('two_pass cannot be used without specifying a file_size')
         clear()
         return
+    end
+    if o.output_dir ~= '' then
+        local res = utils.readdir(o.output_dir)
+        if not res then
+            osd_msg('clip: output directory does not exist: ' .. o.output_dir)
+            msg.error('output directory does not exist: ' .. o.output_dir)
+            clear()
+            return
+        end
     end
     clip(o)
 end)
